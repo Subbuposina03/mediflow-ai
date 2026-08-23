@@ -112,8 +112,7 @@ def seed_database():
         db.refresh(gen_med)
         db.refresh(pediatrics)
 
-        # 2. Create Users
-        # Admin User
+        # 2. Create / Sync Users
         admin_user = db.query(User).filter(User.email == "admin@mediflow.com").first()
         if not admin_user:
             admin_user = User(
@@ -124,8 +123,9 @@ def seed_database():
                 phone="+1 (555) 010-0001"
             )
             db.add(admin_user)
+        else:
+            admin_user.hashed_password = get_password_hash("admin123")
             
-        # Doctor User (General Medicine)
         doctor_user = db.query(User).filter(User.email == "doctor@mediflow.com").first()
         if not doctor_user:
             doctor_user = User(
@@ -136,8 +136,9 @@ def seed_database():
                 phone="+1 (555) 010-0002"
             )
             db.add(doctor_user)
+        else:
+            doctor_user.hashed_password = get_password_hash("doctor123")
             
-        # Doctor User (Cardiology)
         doctor_cardio = db.query(User).filter(User.email == "cardiology@mediflow.com").first()
         if not doctor_cardio:
             doctor_cardio = User(
@@ -148,8 +149,9 @@ def seed_database():
                 phone="+1 (555) 010-0004"
             )
             db.add(doctor_cardio)
+        else:
+            doctor_cardio.hashed_password = get_password_hash("doctor123")
 
-        # Doctor User (Pediatrics)
         doctor_pediatrics = db.query(User).filter(User.email == "pediatrics@mediflow.com").first()
         if not doctor_pediatrics:
             doctor_pediatrics = User(
@@ -160,8 +162,9 @@ def seed_database():
                 phone="+1 (555) 010-0005"
             )
             db.add(doctor_pediatrics)
+        else:
+            doctor_pediatrics.hashed_password = get_password_hash("doctor123")
             
-        # Patient User
         patient_user = db.query(User).filter(User.email == "patient@mediflow.com").first()
         if not patient_user:
             patient_user = User(
@@ -172,6 +175,8 @@ def seed_database():
                 phone="+1 (555) 010-0003"
             )
             db.add(patient_user)
+        else:
+            patient_user.hashed_password = get_password_hash("patient123")
         
         db.commit()
         if doctor_user:
