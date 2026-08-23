@@ -2,6 +2,9 @@
   "name": "mediflow-ai-root",
   "private": true,
   "scripts": {
-    "build": "npm run build --prefix frontend"
+    "build": "cd frontend && npm install && npm run build"
+  },
+  "dependencies": {
+    "typescript": "^5.2.2"
   }
 }
