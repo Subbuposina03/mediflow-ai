@@ -1,10 +1,15 @@
 {
   "name": "mediflow-ai-root",
   "private": true,
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
-    "build": "cd frontend && npm install && npm run build"
+    "postinstall": "npm install --prefix frontend",
+    "build": "npm run build --prefix frontend"
   },
   "dependencies": {
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vite": "^5.2.11"
   }
 }
