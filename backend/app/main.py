@@ -36,41 +36,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register routes
-app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
-app.include_router(
-    auth.router,
-    prefix="/api/auth",
-    tags=["auth-alias"],
-    include_in_schema=False
-)
-app.include_router(queue.router, prefix=f"{settings.API_V1_STR}/queue", tags=["queue"])
-app.include_router(doctors.router, prefix=f"{settings.API_V1_STR}/doctors", tags=["doctors"])
-app.include_router(admin.router, prefix=f"{settings.API_V1_STR}/admin", tags=["admin"])
-app.include_router(
-    patients.router,
-    prefix=f"{settings.API_V1_STR}/patient",
-    tags=["patient"]
-)
-app.include_router(
-    reports.router,
-    prefix=f"{settings.API_V1_STR}/reports",
-    tags=["reports"]
-)
-app.include_router(
-    payments.router,
-    prefix=f"{settings.API_V1_STR}/payments",
-    tags=["payments"]
-)
-app.include_router(
-    payments.router,
-    prefix="/api/payments",
-    tags=["payments-alias"],
-    include_in_schema=False
-)
+# Register routes with primary and alias prefixes for Vercel rewrite compatibility
+for router_module, tag, name in [
+    (auth.router, "auth", "auth"),
+    (queue.router, "queue", "queue"),
+    (doctors.router, "doctors", "doctors"),
+    (admin.router, "admin", "admin"),
+    (patients.router, "patient", "patient"),
+    (reports.router, "reports", "reports"),
+    (payments.router, "payments", "payments"),
+]:
+    app.include_router(router_module, prefix=f"{settings.API_V1_STR}/{name}", tags=[tag])
+    app.include_router(router_module, prefix=f"/api/v1/{name}", tags=[f"{tag}-alias-1"], include_in_schema=False)
+    app.include_router(router_module, prefix=f"/api/{name}", tags=[f"{tag}-alias-2"], include_in_schema=False)
+    app.include_router(router_module, prefix=f"/v1/{name}", tags=[f"{tag}-alias-3"], include_in_schema=False)
+    app.include_router(router_module, prefix=f"/{name}", tags=[f"{tag}-alias-4"], include_in_schema=False)
 
 import os
-os.makedirs("uploads", exist_ok=True)
+upload_dir = "/tmp/uploads" if os.getenv("VERCEL") else "uploads"
+os.makedirs(upload_dir, exist_ok=True)
+
 
 @app.on_event("startup")
 def seed_database():

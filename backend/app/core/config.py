@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     @property
     def DATABASE_URL(self) -> str:
         if self.USE_SQLITE or not all([self.MYSQL_SERVER, self.MYSQL_USER, self.MYSQL_PASSWORD, self.MYSQL_DB]):
+            if os.getenv("VERCEL"):
+                return "sqlite:////tmp/mediflow.db"
             return "sqlite:///./mediflow.db"
         return f"mysql+pymysql://{self.MYSQL_USER}:{self.MYSQL_PASSWORD}@{self.MYSQL_SERVER}:{self.MYSQL_PORT}/{self.MYSQL_DB}"
 
