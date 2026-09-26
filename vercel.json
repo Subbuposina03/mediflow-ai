@@ -1,5 +1,5 @@
 {
-  "installCommand": "npm install --prefix frontend",
+  "installCommand": "npm install --prefix frontend --include=dev",
   "buildCommand": "npm run build --prefix frontend",
   "outputDirectory": "frontend/dist",
   "rewrites": [
