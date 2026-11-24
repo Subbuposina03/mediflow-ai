@@ -127,7 +127,7 @@ def get_live_queue(department_id: int, db: Session = Depends(get_db)):
     tokens_list = [{
         "id": t.id,
         "token_number": t.token_number,
-        "patient_name": t.patient.user.name,
+        "patient_name": t.patient.user.name if t.patient and t.patient.user else "Patient",
         "priority_score": t.priority_score,
         "predicted_wait_time": t.predicted_wait_time,
         "appointment_time": t.appointment_time,
@@ -145,9 +145,9 @@ def get_live_queue(department_id: int, db: Session = Depends(get_db)):
         "active": [{
             "id": a.id,
             "token_number": a.token_number,
-            "doctor_name": a.doctor.user.name if a.doctor else "Unassigned",
+            "doctor_name": a.doctor.user.name if a.doctor and a.doctor.user else "Unassigned",
             "room_number": a.doctor.room_number if a.doctor else "N/A",
-            "patient_name": a.patient.user.name
+            "patient_name": a.patient.user.name if a.patient and a.patient.user else "Patient"
         } for a in active_tokens],
         "pending": [{
             "id": x["id"],

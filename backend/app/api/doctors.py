@@ -201,7 +201,7 @@ def get_summary(
     symptoms = last_token.symptoms if last_token else ""
     
     summary = ai_engine.generate_patient_summary(
-        name=patient.user.name,
+        name=patient.user.name if patient and patient.user else "Patient",
         age_str=patient.date_of_birth,
         gender=patient.gender,
         symptoms=symptoms,
@@ -292,7 +292,7 @@ def get_patient_ai_summary(
             age = dob # Fallback directly if not standard date format
             
     patient_info = {
-        "name": patient.user.name,
+        "name": patient.user.name if patient and patient.user else "Patient",
         "age": age,
         "gender": patient.gender or "N/A",
         "blood_group": patient.blood_group or "N/A"

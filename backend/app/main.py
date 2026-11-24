@@ -47,7 +47,8 @@ for router_module, tag, name in [
     (payments.router, "payments", "payments"),
 ]:
     app.include_router(router_module, prefix=f"{settings.API_V1_STR}/{name}", tags=[tag])
-    app.include_router(router_module, prefix=f"/api/v1/{name}", tags=[f"{tag}-alias-1"], include_in_schema=False)
+    if settings.API_V1_STR != "/api/v1":
+        app.include_router(router_module, prefix=f"/api/v1/{name}", tags=[f"{tag}-alias-1"], include_in_schema=False)
     app.include_router(router_module, prefix=f"/api/{name}", tags=[f"{tag}-alias-2"], include_in_schema=False)
     app.include_router(router_module, prefix=f"/v1/{name}", tags=[f"{tag}-alias-3"], include_in_schema=False)
     app.include_router(router_module, prefix=f"/{name}", tags=[f"{tag}-alias-4"], include_in_schema=False)

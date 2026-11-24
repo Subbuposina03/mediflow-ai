@@ -34,9 +34,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const host = window.location.host;
-    const cleanHost = host.includes('5173') ? host.replace('5173', '8005') : host;
-    
-    const wsUrl = `${protocol}//${cleanHost}/api/v1/queue/ws${departmentId ? '/' + departmentId : ''}`;
+    const wsUrl = (import.meta as any).env?.VITE_WS_URL || `${protocol}//${host}/api/v1/queue/ws${departmentId ? '/' + departmentId : ''}`;
     
     try {
       const ws = new WebSocket(wsUrl);
