@@ -36,3 +36,5 @@ backend/error.txt
 Thumbs.db
 .vscode/
 .idea/
+
+.vercel
